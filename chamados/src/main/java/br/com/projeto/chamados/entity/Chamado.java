@@ -17,7 +17,7 @@ public class Chamado {
     @JoinColumn(name = "tecnico_id")
     private Tecnico tecnico;
     @ManyToOne
-    @JoinColumn(name = "funcionario_id")
+    @JoinColumn(name = "_id")
     private Funcionario funcionario;
 
 

@@ -26,7 +26,11 @@ public class ChamadoService {
     }
 
     public Chamado salvar(Chamado chamado) {
-        return chamadoRepository.save(chamado);
+        if (chamadoRepository.existsById(chamado.getId())){
+            return chamadoRepository.save(chamado);
+        }else{
+            return null;
+        }
     }
 
     public Optional<Chamado> atualizar(Long id,Chamado chamado) {
