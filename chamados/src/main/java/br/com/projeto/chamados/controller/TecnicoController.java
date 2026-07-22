@@ -11,31 +11,31 @@ import java.util.Optional;
 @RequestMapping("/tecnico")
 public class TecnicoController {
     @Autowired
-    private TecnicoService tecnicoService;
+    private TecnicoService tecnicoservice;
 
     @GetMapping("/tecnicos")
     public List<Tecnico> Todos(){
-        return tecnicoService.buscarTodos();
+        return tecnicoservice.buscarTodos();
     }
-    @GetMapping("/tecnico/id/${id}")
+    @GetMapping("/tecnico/id/{id}")
     public Optional<Tecnico> buscarPorId(@PathVariable Long id){
-        return tecnicoService.buscarPorId(id);
+        return tecnicoservice.buscarPorId(id);
     }
-    @GetMapping("/tecnico/nome/${nome}")
+    @GetMapping("/tecnico/nome/{nome}")
     public Optional<Tecnico> buscarPorNome(@PathVariable String nome){
-        return tecnicoService.buscarPorNome(nome);
+        return tecnicoservice.buscarPorNome(nome);
     }
-    @PutMapping("/atuaizar/${id}")
+    @PutMapping("/atuaizar/{id}")
     public Optional<Tecnico> atualizar(@PathVariable Long id, @RequestBody Tecnico tecnico){
-        return tecnicoService.atualizar(id, tecnico);
+        return tecnicoservice.atualizar(id, tecnico);
     }
     @PostMapping("/criar")
     public Tecnico criar(@RequestBody Tecnico tecnico){
-        return tecnicoService.salvar(tecnico);
+        return tecnicoservice.salvar(tecnico);
     }
 
-    @DeleteMapping("/deletar/${id}")
+    @DeleteMapping("/deletar/{id}")
     public void deletar(@PathVariable Long id){
-        tecnicoService.deletar(id);
+        tecnicoservice.deletar(id);
     }
 }

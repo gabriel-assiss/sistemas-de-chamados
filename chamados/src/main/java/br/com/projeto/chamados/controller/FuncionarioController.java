@@ -16,32 +16,32 @@ import java.util.Optional;
     @RequestMapping("/funcionario")
     public class FuncionarioController {
         @Autowired
-        private FuncionarioService funcionarioService;
+        private FuncionarioService funcionarioservice;
 
         @GetMapping("/funcionarios")
         public List<Funcionario> Todos(){
-            return funcionarioService.buscarTodos();
+            return funcionarioservice.buscarTodos();
         }
-        @GetMapping("/funcionario/id/${id}")
+        @GetMapping("/funcionario/id/{id}")
         public Optional<Funcionario> buscarPorId(@PathVariable Long id){
-            return funcionarioService.buscarPorId(id);
+            return funcionarioservice.buscarPorId(id);
         }
-        @GetMapping("/funcionario/nome/${nome}")
+        @GetMapping("/funcionario/nome/{nome}")
         public Optional<Funcionario> buscarPorNome(@PathVariable String nome){
-            return funcionarioService.buscarPorNome(nome);
+            return funcionarioservice.buscarPorNome(nome);
         }
-        @PutMapping("/atuaizar/${id}")
+        @PutMapping("/atuaizar/{id}")
         public Optional<Funcionario> atualizar(@PathVariable Long id, @RequestBody Funcionario funcionario){
-            return funcionarioService.atualizar(id, funcionario);
+            return funcionarioservice.atualizar(id, funcionario);
         }
         @PostMapping("/criar")
         public Funcionario criar(@RequestBody Funcionario funcionario){
-            return funcionarioService.salvar(funcionario);
+            return funcionarioservice.salvar(funcionario);
         }
 
-        @DeleteMapping("/deletar/${id}")
+        @DeleteMapping("/deletar/{id}")
         public void deletar(@PathVariable Long id){
-            funcionarioService.deletar(id);
+            funcionarioservice.deletar(id);
         }
 
     }

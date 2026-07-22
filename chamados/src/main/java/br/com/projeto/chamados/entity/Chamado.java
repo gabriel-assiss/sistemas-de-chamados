@@ -2,7 +2,6 @@ package br.com.projeto.chamados.entity;
 
 import jakarta.persistence.*;
 
-import java.util.List;
 
 @Entity
 @Table(name="chamado")
@@ -12,29 +11,29 @@ public class Chamado {
     private Long id;
     private String titulo;
     private String problema;
+    private String status;
+
 
     @ManyToOne
     @JoinColumn(name = "tecnico_id")
     private Tecnico tecnico;
     @ManyToOne
-    @JoinColumn(name = "_id")
+    @JoinColumn(name = "funcionario_id")
     private Funcionario funcionario;
 
+    public String getStatus() {
+        return status;
+    }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
     }
 
     public String getProblema() {
