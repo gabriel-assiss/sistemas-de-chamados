@@ -5,6 +5,7 @@ import br.com.projeto.chamados.entity.Chamado;
 import br.com.projeto.chamados.entity.Tecnico;
 import br.com.projeto.chamados.repository.ChamadoRepository;
 import br.com.projeto.chamados.repository.FuncionarioRepository;
+import br.com.projeto.chamados.repository.TecnicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,19 +16,44 @@ import java.util.Optional;
 public class ChamadoService {
     @Autowired
     private ChamadoRepository chamadoRepository;
+    private TecnicoRepository tecnicoRepository;
     private ChamadoResponseDTO chamadoResponseDTO;
+
+    public Chamado atribuirTecnico(Long chamadoId, Long tecnicoId) {
+
+        Chamado chamado = chamadoRepository.findById(chamadoId)
+                .orElseThrow();
+
+        Tecnico tecnico = tecnicoRepository.findById(tecnicoId)
+                .orElseThrow();
+
+        chamado.setTecnico(tecnico);
+        chamado.setStatus("Em andamento");
+
+        return chamadoRepository.save(chamado);
+    }
+    private ChamadoResponseDTO converterParaDTO(Chamado chamado){
+            ChamadoResponseDTO chamadoDTO = new ChamadoResponseDTO();
+            
+            if (chamado.getTecnico() == null) {
+                chamadoDTO.setNomeTecnico("não atribuido");
+            } else {
+                chamado.setStatus("em andamento");
+                chamadoDTO.setNomeTecnico(chamado.getTecnico().getNome());
+            }
+            chamadoDTO.setId(chamado.getId());
+            chamadoDTO.setProblema(chamado.getProblema());
+            chamadoDTO.setStatus(chamado.getStatus());
+            chamadoDTO.setNomeFuncionario(chamado.getFuncionario().getNome());
+
+            return chamadoDTO;
+    }
 
     public List<ChamadoResponseDTO> buscarTodos() {
         List<Chamado> chamados = chamadoRepository.findAll();
         List<ChamadoResponseDTO> chamadosDTOs = new ArrayList<>();
         for (Chamado chamado : chamados) {
-            ChamadoResponseDTO chamadoResponseDTO = new ChamadoResponseDTO();
-            chamadoResponseDTO.setId(chamado.getId());
-            chamadoResponseDTO.setProblema(chamado.getProblema());
-            chamadoResponseDTO.setStatus(chamado.getStatus());
-            chamadoResponseDTO.setNomeFuncionario(chamado.getFuncionario().getNome());
-            chamadoResponseDTO.setNomeTecnico(chamado.getTecnico().getNome());
-            chamadosDTOs.add(chamadoResponseDTO);
+           chamadosDTOs.add(converterParaDTO(chamado));
         }
         return  chamadosDTOs;
     }
@@ -36,27 +62,21 @@ public class ChamadoService {
 
              Optional<Chamado> chamado = chamadoRepository.findById(id);
              if (chamado.isPresent()) {
-                 ChamadoResponseDTO chamadoDTO = new ChamadoResponseDTO();
-                 Chamado chamadoEncontrado = chamado.get();
-                 chamadoDTO.setId(chamadoEncontrado.getId());
-                 chamadoDTO.setProblema(chamadoEncontrado.getProblema());
-                 chamadoDTO.setStatus(chamadoEncontrado.getStatus());
-                 chamadoDTO.setNomeFuncionario(chamadoEncontrado.getFuncionario().getNome());
-                 if (chamadoEncontrado.getTecnico().getNome()==null){
-                     chamadoDTO.setNomeTecnico("não atribuido");
-                 }else{
-                     chamadoDTO.setNomeTecnico(chamadoEncontrado.getTecnico().getNome());
-                 }
-                 return Optional.of(chamadoDTO);
-             }else  {
+                 return Optional.of(converterParaDTO(chamado.get()));
+             }else {
                  return Optional.empty();
              }
 
-
     }
 
-    public Optional<Chamado> buscarPorNome(String nome) {
-        return chamadoRepository.findByTitulo(nome);
+    public Optional<ChamadoResponseDTO> buscarPorProblema(String nome) {
+        Optional<Chamado> chamado = chamadoRepository.findByProblema(nome);
+        if (chamado.isPresent()) {
+            return Optional.of(converterParaDTO(chamado.get()));
+        }else{
+            return Optional.empty();
+        }
+
     }
 
     public Chamado salvar(Chamado chamado) {

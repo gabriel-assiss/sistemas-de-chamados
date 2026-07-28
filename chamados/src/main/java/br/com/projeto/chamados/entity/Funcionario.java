@@ -12,9 +12,11 @@ public class Funcionario {
     private Long id;
     private  String nome;
     private String cargo;
-
     @OneToMany(mappedBy = "funcionario")
     private List<Chamado> chamados;
+    @OneToOne
+    @JoinColumn(name = "usuario_id", unique = true)
+    private Usuario usuario;
 
     public Long getId() {
         return id;
@@ -38,5 +40,13 @@ public class Funcionario {
 
     public void setCargo(String cargo) {
         this.cargo = cargo;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

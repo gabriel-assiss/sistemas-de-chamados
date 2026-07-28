@@ -11,7 +11,7 @@ public class Chamado {
     private Long id;
     private String titulo;
     private String problema;
-    private String status;
+    private String status ="Não Atendido";
 
 
     @ManyToOne

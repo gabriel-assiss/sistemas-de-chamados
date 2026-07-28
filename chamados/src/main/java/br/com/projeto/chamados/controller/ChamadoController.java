@@ -24,8 +24,8 @@ public class ChamadoController {
         return chamadoservice.buscarPorId(id);
     }
     @GetMapping("/chamado/nome/{nome}")
-    public Optional<Chamado> buscarPorNome(@PathVariable String nome){
-        return chamadoservice.buscarPorNome(nome);
+    public Optional<ChamadoResponseDTO> buscarPorProblema(@PathVariable String nome){
+        return chamadoservice.buscarPorProblema(nome);
     }
     @PutMapping("/atuaizar/{id}")
     public Optional<Chamado> atualizar(@PathVariable Long id, @RequestBody Chamado chamado){
@@ -40,5 +40,6 @@ public class ChamadoController {
     public void deletar(@PathVariable Long id){
         chamadoservice.deletar(id);
     }
+
 
 }
