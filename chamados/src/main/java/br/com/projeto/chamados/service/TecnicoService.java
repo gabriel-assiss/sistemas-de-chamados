@@ -33,7 +33,7 @@ public class TecnicoService {
     public Optional<Tecnico> atualizar(Long id, Tecnico tecnico) {
         Tecnico tecnicoExistente = tecnicoRepository.findById(id).orElse(null);
         tecnicoExistente.setNome(tecnico.getNome());
-        tecnicoExistente.setcargo(tecnico.getcargo());
+        tecnicoExistente.setCargo(tecnico.getCargo());
         return  Optional.of(tecnicoRepository.save(tecnicoExistente));
     }
 
