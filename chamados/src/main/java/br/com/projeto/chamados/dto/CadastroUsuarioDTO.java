@@ -13,6 +13,7 @@ public class CadastroUsuarioDTO {
     private Role role;
     private String cargo;
 
+
     public String getNome() {
         return nome;
     }

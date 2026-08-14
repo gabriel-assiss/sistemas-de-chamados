@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/Usuario")
+@RequestMapping("/admin")
 public class UsuarioController {
     @Autowired
     private UsuarioService usuarioservice;
