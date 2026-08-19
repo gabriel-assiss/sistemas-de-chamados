@@ -31,7 +31,12 @@ public class ChamadoController {
     public Optional<Chamado> atualizar(@PathVariable Long id, @RequestBody Chamado chamado){
         return chamadoservice.atualizar(id, chamado);
     }
+    @PutMapping("/ChamadoResolvido")
+    public void resolvido(@RequestBody Long id){
+        chamadoservice.atualizarStatusParaResolvido(id);
+    }
     @PostMapping("/criar")
+
     public Chamado criar(@RequestBody Chamado chamado){
         return chamadoservice.salvar(chamado);
     }

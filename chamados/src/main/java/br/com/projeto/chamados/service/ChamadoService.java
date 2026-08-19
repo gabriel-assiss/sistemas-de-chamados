@@ -3,6 +3,7 @@ package br.com.projeto.chamados.service;
 import br.com.projeto.chamados.dto.ChamadoResponseDTO;
 import br.com.projeto.chamados.entity.Chamado;
 import br.com.projeto.chamados.entity.Tecnico;
+import br.com.projeto.chamados.enums.Status;
 import br.com.projeto.chamados.repository.ChamadoRepository;
 import br.com.projeto.chamados.repository.FuncionarioRepository;
 import br.com.projeto.chamados.repository.TecnicoRepository;
@@ -28,7 +29,7 @@ public class ChamadoService {
                 .orElseThrow();
 
         chamado.setTecnico(tecnico);
-        chamado.setStatus("Em andamento");
+        chamado.setStatus(Status.NO_RESOLVIDO);
 
         return chamadoRepository.save(chamado);
     }
@@ -38,7 +39,7 @@ public class ChamadoService {
             if (chamado.getTecnico() == null) {
                 chamadoDTO.setNomeTecnico("não atribuido");
             } else {
-                chamado.setStatus("em andamento");
+                chamado.setStatus(Status.NO_RESOLVIDO);
                 chamadoDTO.setNomeTecnico(chamado.getTecnico().getNome());
             }
             chamadoDTO.setId(chamado.getId());
@@ -95,6 +96,12 @@ public class ChamadoService {
 
     public void deletar(Long id) {
         chamadoRepository.deleteById(id);
+    }
+
+    public void atualizarStatusParaResolvido(Long id){
+        Chamado chamado = chamadoRepository.findById(id).orElse(null);
+        chamado.setStatus(Status.RESOLVIDO);
+        chamadoRepository.save(chamado);
     }
 
 

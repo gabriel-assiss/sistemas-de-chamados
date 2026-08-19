@@ -1,5 +1,7 @@
 package br.com.projeto.chamados.entity;
 
+
+import br.com.projeto.chamados.enums.Status;
 import jakarta.persistence.*;
 
 
@@ -11,7 +13,8 @@ public class Chamado {
     private Long id;
     private String titulo;
     private String problema;
-    private String status ="Não Atendido";
+    @Enumerated(EnumType.STRING)
+    Status status = Status.NO_RESOLVIDO;
 
 
     @ManyToOne
@@ -21,11 +24,11 @@ public class Chamado {
     @JoinColumn(name = "funcionario_id")
     private Funcionario funcionario;
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
     public long getId() {
