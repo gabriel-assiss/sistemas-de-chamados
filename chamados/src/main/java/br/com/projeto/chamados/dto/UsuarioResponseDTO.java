@@ -3,10 +3,19 @@ package br.com.projeto.chamados.dto;
 import br.com.projeto.chamados.entity.Usuario;
 
 public class UsuarioResponseDTO {
+    private Long id;
     private String token;
     private String email;
     private  String nome;
     private String role;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;

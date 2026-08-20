@@ -44,9 +44,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
                         .requestMatchers("/funcionario/**").hasRole("FUNCIONARIO")
 
-                        .requestMatchers("/chamado/**").hasRole("FUNCIONARIO")
+                        .requestMatchers("/chamado/**").hasAnyRole("FUNCIONARIO", "TECNICO")
 
-                        .requestMatchers("/chamado/**").hasRole("TECNICO")
+
 
                         .anyRequest().authenticated()
                 )

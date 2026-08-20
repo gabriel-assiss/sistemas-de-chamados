@@ -2,7 +2,9 @@ package br.com.projeto.chamados.service;
 
 import br.com.projeto.chamados.dto.ChamadoResponseDTO;
 import br.com.projeto.chamados.entity.Chamado;
+import br.com.projeto.chamados.entity.Funcionario;
 import br.com.projeto.chamados.entity.Tecnico;
+import br.com.projeto.chamados.enums.Role;
 import br.com.projeto.chamados.enums.Status;
 import br.com.projeto.chamados.repository.ChamadoRepository;
 import br.com.projeto.chamados.repository.FuncionarioRepository;
@@ -19,6 +21,8 @@ public class ChamadoService {
     private ChamadoRepository chamadoRepository;
     private TecnicoRepository tecnicoRepository;
     private ChamadoResponseDTO chamadoResponseDTO;
+    private ChamadoService chamadoService;
+    private FuncionarioRepository funcionarioRepository;
 
     public Chamado atribuirTecnico(Long chamadoId, Long tecnicoId) {
 
@@ -80,8 +84,51 @@ public class ChamadoService {
 
     }
 
+    public Optional<List<ChamadoResponseDTO>> buscarChamadosPorUsuario(long id, Role role) {
+
+        if (role == Role.TECNICO) {
+
+            Optional<Tecnico> tecnico = tecnicoRepository.findByUsuarioId(id);
+
+            if (tecnico.isPresent()) {
+
+                List<Chamado> chamados = chamadoRepository.findAll();
+
+                List<ChamadoResponseDTO> chamadosDTOs = new ArrayList<>();
+
+                for (Chamado chamado : chamados) {
+                    ChamadoResponseDTO chamadoDTO = converterParaDTO(chamado);
+                    chamadosDTOs.add(chamadoDTO);
+                }
+
+                return Optional.of(chamadosDTOs);
+            }
+
+        } else if (role == Role.FUNCIONARIO) {
+
+            Optional<Funcionario> funcionario = funcionarioRepository.findByUsuarioId(id);
+
+            if (funcionario.isPresent()) {
+
+                List<Chamado> chamados =
+                        chamadoRepository.findAllByFuncionarioId(funcionario.get().getId());
+
+                List<ChamadoResponseDTO> chamadosDTOs = new ArrayList<>();
+
+                for (Chamado chamado : chamados) {
+                    ChamadoResponseDTO chamadoDTO = converterParaDTO(chamado);
+                    chamadosDTOs.add(chamadoDTO);
+                }
+
+                return Optional.of(chamadosDTOs);
+            }
+        }
+
+        return Optional.empty();
+    }
+
     public Chamado salvar(Chamado chamado) {
-        if (chamadoRepository.existsById(chamado.getId())){
+        if (!chamadoRepository.existsById(chamado.getId())){
             return chamadoRepository.save(chamado);
         }else{
             return null;

@@ -2,6 +2,7 @@ package br.com.projeto.chamados.controller;
 
 import br.com.projeto.chamados.dto.ChamadoResponseDTO;
 import br.com.projeto.chamados.entity.Chamado;
+import br.com.projeto.chamados.enums.Role;
 import br.com.projeto.chamados.service.ChamadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,11 @@ public class ChamadoController {
     public Optional<ChamadoResponseDTO> buscarPorId(@PathVariable Long id){
         return chamadoservice.buscarPorId(id);
     }
+    @GetMapping("/chamado/id")
+    public Optional<List<ChamadoResponseDTO>> buscarPorId(@RequestBody Long id, Role role){
+        return chamadoservice.buscarChamadosPorUsuario(id, role);
+    }
+
     @GetMapping("/chamado/nome/{nome}")
     public Optional<ChamadoResponseDTO> buscarPorProblema(@PathVariable String nome){
         return chamadoservice.buscarPorProblema(nome);
