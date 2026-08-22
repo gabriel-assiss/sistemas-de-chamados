@@ -2,54 +2,65 @@ package br.com.projeto.chamados.controller;
 
 import br.com.projeto.chamados.dto.ChamadoResponseDTO;
 import br.com.projeto.chamados.entity.Chamado;
-import br.com.projeto.chamados.enums.Role;
+import br.com.projeto.chamados.entity.Usuario;
 import br.com.projeto.chamados.service.ChamadoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/chamado")
+@RequestMapping("/chamados")
 public class ChamadoController {
-    @Autowired
-    private ChamadoService chamadoservice;
+    private final ChamadoService chamadoservice;
 
-    @GetMapping("/chamados")
-    public List<ChamadoResponseDTO> Todos(){
-        return chamadoservice.buscarTodos();
-    }
-    @GetMapping("/chamado/id/{id}")
-    public Optional<ChamadoResponseDTO> buscarPorId(@PathVariable Long id){
-        return chamadoservice.buscarPorId(id);
-    }
-    @GetMapping("/chamado/id")
-    public Optional<List<ChamadoResponseDTO>> buscarPorId(@RequestBody Long id, Role role){
-        return chamadoservice.buscarChamadosPorUsuario(id, role);
+    public ChamadoController(ChamadoService chamadoservice) {
+        this.chamadoservice = chamadoservice;
     }
 
-    @GetMapping("/chamado/nome/{nome}")
-    public Optional<ChamadoResponseDTO> buscarPorProblema(@PathVariable String nome){
-        return chamadoservice.buscarPorProblema(nome);
+    @GetMapping
+    public ResponseEntity<List<ChamadoResponseDTO>> todos(){
+        return ResponseEntity.ok(chamadoservice.buscarTodos());
     }
-    @PutMapping("/atuaizar/{id}")
-    public Optional<Chamado> atualizar(@PathVariable Long id, @RequestBody Chamado chamado){
-        return chamadoservice.atualizar(id, chamado);
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ChamadoResponseDTO> buscarPorId(@PathVariable Long id){
+        return ResponseEntity.of(chamadoservice.buscarPorId(id));
     }
-    @PutMapping("/ChamadoResolvido")
-    public void resolvido(@RequestBody Long id){
+
+    @GetMapping("/meus")
+    public ResponseEntity<List<ChamadoResponseDTO>> buscarMeusChamados(Authentication authentication){
+        Usuario usuario = (Usuario) authentication.getPrincipal();
+        return ResponseEntity.of(chamadoservice.buscarChamadosPorUsuario(usuario.getId(), usuario.getRole()));
+    }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<ChamadoResponseDTO> buscarPorProblema(@RequestParam String problema){
+        return ResponseEntity.of(chamadoservice.buscarPorProblema(problema));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Chamado> atualizar(@PathVariable Long id, @RequestBody Chamado chamado){
+        return ResponseEntity.of(chamadoservice.atualizar(id, chamado));
+    }
+
+    @PatchMapping("/{id}/resolver")
+    public ResponseEntity<Void> resolvido(@PathVariable Long id){
         chamadoservice.atualizarStatusParaResolvido(id);
-    }
-    @PostMapping("/criar")
-
-    public Chamado criar(@RequestBody Chamado chamado){
-        return chamadoservice.salvar(chamado);
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/deletar/{id}")
-    public void deletar(@PathVariable Long id){
+    @PostMapping
+    public ResponseEntity<Chamado> criar(@RequestBody Chamado chamado){
+        return ResponseEntity.status(201).body(chamadoservice.salvar(chamado));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id){
         chamadoservice.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 
 

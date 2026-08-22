@@ -2,40 +2,48 @@ package br.com.projeto.chamados.controller;
 
 import br.com.projeto.chamados.entity.Tecnico;
 import br.com.projeto.chamados.service.TecnicoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 @RestController
-@RequestMapping("/tecnico")
+@RequestMapping("/tecnicos")
 public class TecnicoController {
-    @Autowired
-    private TecnicoService tecnicoservice;
+    private final TecnicoService tecnicoservice;
 
-    @GetMapping("/tecnicos")
-    public List<Tecnico> Todos(){
-        return tecnicoservice.buscarTodos();
-    }
-    @GetMapping("/tecnico/id/{id}")
-    public Optional<Tecnico> buscarPorId(@PathVariable Long id){
-        return tecnicoservice.buscarPorId(id);
-    }
-    @GetMapping("/tecnico/nome/{nome}")
-    public Optional<Tecnico> buscarPorNome(@PathVariable String nome){
-        return tecnicoservice.buscarPorNome(nome);
-    }
-    @PutMapping("/atuaizar/{id}")
-    public Optional<Tecnico> atualizar(@PathVariable Long id, @RequestBody Tecnico tecnico){
-        return tecnicoservice.atualizar(id, tecnico);
-    }
-    @PostMapping("/criar")
-    public Tecnico criar(@RequestBody Tecnico tecnico){
-        return tecnicoservice.salvar(tecnico);
+    public TecnicoController(TecnicoService tecnicoservice) {
+        this.tecnicoservice = tecnicoservice;
     }
 
-    @DeleteMapping("/deletar/{id}")
-    public void deletar(@PathVariable Long id){
+    @GetMapping
+    public ResponseEntity<List<Tecnico>> todos(){
+        return ResponseEntity.ok(tecnicoservice.buscarTodos());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Tecnico> buscarPorId(@PathVariable Long id){
+        return ResponseEntity.of(tecnicoservice.buscarPorId(id));
+    }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<Tecnico> buscarPorNome(@RequestParam String nome){
+        return ResponseEntity.of(tecnicoservice.buscarPorNome(nome));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Tecnico> atualizar(@PathVariable Long id, @RequestBody Tecnico tecnico){
+        return ResponseEntity.of(tecnicoservice.atualizar(id, tecnico));
+    }
+
+    @PostMapping
+    public ResponseEntity<Tecnico> criar(@RequestBody Tecnico tecnico){
+        return ResponseEntity.status(201).body(tecnicoservice.salvar(tecnico));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id){
         tecnicoservice.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }

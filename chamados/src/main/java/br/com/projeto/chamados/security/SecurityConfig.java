@@ -40,11 +40,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 
-                        .requestMatchers("/tecnico/**").hasRole("TECNICO")
+                        .requestMatchers("/tecnicos/**").hasRole("TECNICO")
 
-                        .requestMatchers("/funcionario/**").hasRole("FUNCIONARIO")
+                        .requestMatchers("/funcionarios/**").hasRole("FUNCIONARIO")
 
-                        .requestMatchers("/chamado/**").hasAnyRole("FUNCIONARIO", "TECNICO")
+                        .requestMatchers("/chamados/**").hasAnyRole("FUNCIONARIO", "TECNICO")
 
 
 

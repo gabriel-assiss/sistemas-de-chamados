@@ -9,7 +9,6 @@ import br.com.projeto.chamados.enums.Status;
 import br.com.projeto.chamados.repository.ChamadoRepository;
 import br.com.projeto.chamados.repository.FuncionarioRepository;
 import br.com.projeto.chamados.repository.TecnicoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,12 +16,19 @@ import java.util.List;
 import java.util.Optional;
 @Service
 public class ChamadoService {
-    @Autowired
-    private ChamadoRepository chamadoRepository;
-    private TecnicoRepository tecnicoRepository;
-    private ChamadoResponseDTO chamadoResponseDTO;
-    private ChamadoService chamadoService;
-    private FuncionarioRepository funcionarioRepository;
+    private final ChamadoRepository chamadoRepository;
+    private final TecnicoRepository tecnicoRepository;
+    private final FuncionarioRepository funcionarioRepository;
+
+    public ChamadoService(
+            ChamadoRepository chamadoRepository,
+            TecnicoRepository tecnicoRepository,
+            FuncionarioRepository funcionarioRepository
+    ) {
+        this.chamadoRepository = chamadoRepository;
+        this.tecnicoRepository = tecnicoRepository;
+        this.funcionarioRepository = funcionarioRepository;
+    }
 
     public Chamado atribuirTecnico(Long chamadoId, Long tecnicoId) {
 

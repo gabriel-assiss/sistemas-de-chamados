@@ -7,7 +7,9 @@ import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.util.Date;
+
 @Service
 public class JwtService {
     private final String secret;
@@ -17,10 +19,12 @@ public class JwtService {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
     public String gerarToken(Usuario usuario) {
-
+        Instant agora = Instant.now();
+        Instant expiracao = agora.plusSeconds(60 * 60 * 2);
         return Jwts.builder()
                 .subject(usuario.getEmail())
                 .claim("role", usuario.getRole().name())
+                .expiration(Date.from(expiracao))
                 .signWith(key)
                 .compact();
     }

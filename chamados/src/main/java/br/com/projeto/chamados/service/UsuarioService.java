@@ -9,7 +9,6 @@ import br.com.projeto.chamados.repository.FuncionarioRepository;
 import br.com.projeto.chamados.repository.TecnicoRepository;
 import br.com.projeto.chamados.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,20 +17,21 @@ import java.util.Optional;
 
 @Service
 public class UsuarioService {
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-    @Autowired
-    private TecnicoRepository tecnicoRepository;
-    @Autowired
-    private FuncionarioRepository funcionarioRepository;
-
+    private final UsuarioRepository usuarioRepository;
+    private final TecnicoRepository tecnicoRepository;
+    private final FuncionarioRepository funcionarioRepository;
     private final PasswordEncoder passwordEncoder;
 
 
     public UsuarioService(
             UsuarioRepository usuarioRepository,
+            TecnicoRepository tecnicoRepository,
+            FuncionarioRepository funcionarioRepository,
             PasswordEncoder passwordEncoder
     ) {
+        this.usuarioRepository = usuarioRepository;
+        this.tecnicoRepository = tecnicoRepository;
+        this.funcionarioRepository = funcionarioRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
